@@ -16,7 +16,7 @@ CORS(app)
 def index(): # Default value can be specified
     try:
         conn = connect()
-        Qry = "select * from user; select * from user;";
+        Qry = "select * from user;";
         cursor = conn.cursor(dictionary=True)
         cursor.execute(Qry)
         users = cursor.fetchall()
@@ -24,7 +24,7 @@ def index(): # Default value can be specified
         conn.close()
         return jsonify({"users": users}, {"success": True})
     except Exception as e:
-        return jsonify({"Error": {"Message": str(e)}})
+        return jsonify({"Error": {"Message": str(e)}}, {"success": False})
 
 @app.route('/home', methods=["GET"])
 def home(): # Default value can be specified
@@ -38,7 +38,7 @@ def home(): # Default value can be specified
         conn.close()
         return jsonify({"users": users}, {"success": True})
     except Exception as e:
-        return jsonify({"Error": {"Message": str(e)}})
+        return jsonify({"Error": {"Message": str(e)}}, {"success": False})
 
 if __name__ == '__main__':
     app.run(debug= os.getenv("DEBUG"))
