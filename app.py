@@ -16,29 +16,39 @@ CORS(app)
 def index(): # Default value can be specified
     try:
         conn = connect()
-        Qry = "select * from user;";
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute(Qry)
-        users = cursor.fetchall()
-        cursor.close()
-        conn.close()
-        return jsonify({"users": users}, {"success": True})
+        if conn is not None:
+            Qry = "select * from user;";
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute(Qry)
+            users = cursor.fetchall()
+            return jsonify({"users": users}, {"Success": True})
+        else:
+            return jsonify({"Error": {"Message": "Please Verify DB Settings"}}, {"Success": False})
     except Exception as e:
-        return jsonify({"Error": {"Message": str(e)}}, {"success": False})
+        return jsonify({"Error": {"Message": str(e)}}, {"Success": False})
+    finally:
+        if conn is not None:
+            cursor.close()
+            conn.close()
 
 @app.route('/home', methods=["GET"])
 def home(): # Default value can be specified
     try:
         conn = connectDynamicDB()
-        Qry = "select * from user; select * from user;";
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute(Qry)
-        users = cursor.fetchall()
-        cursor.close()
-        conn.close()
-        return jsonify({"users": users}, {"success": True})
+        if conn is not None:
+            Qry = "select * from user; select * from user;";
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute(Qry)
+            users = cursor.fetchall()
+            return jsonify({"users": users}, {"Success": True})
+        else:
+            return jsonify({"Error": {"Message": "Please Verify DB Settings"}}, {"Success": False})
     except Exception as e:
-        return jsonify({"Error": {"Message": str(e)}}, {"success": False})
+        return jsonify({"Error": {"Message": str(e)}}, {"Success": False})
+    finally:
+        if conn is not None:
+            cursor.close()
+            conn.close()
 
 if __name__ == '__main__':
     app.run(debug= os.getenv("DEBUG"))
