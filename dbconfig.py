@@ -14,8 +14,6 @@ def connect():
             print("Verify Config Details")
     except Exception as e:
         print(e)
-    finally:
-        print("end")
 
 def connectDynamicDB():
     try:
@@ -32,8 +30,6 @@ def connectDynamicDB():
             print("Verify Config Details")
     except Exception as e:
         print(e)
-    finally:
-        print("done")
 
 def SetDynamicDBConfig():
     try:
@@ -49,4 +45,5 @@ def SetDynamicDBConfig():
     except Exception as e:
         print(e)
     finally:
-        print("closed")
+        cursor.close()
+        conn.close()
