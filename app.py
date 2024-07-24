@@ -36,7 +36,7 @@ def home(): # Default value can be specified
     try:
         conn = connectDynamicDB()
         if conn is not None:
-            Qry = "select * from user; select * from user;";
+            Qry = "select * from user;";
             cursor = conn.cursor(dictionary=True)
             cursor.execute(Qry)
             users = cursor.fetchall()
