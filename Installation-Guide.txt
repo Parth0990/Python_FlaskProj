@@ -1,0 +1,16 @@
+
+-- dotenv
+pip install python-dotenv
+
+-- mysql
+pip install mysql-connector-python
+
+-- DBSetting
+Create table DBSetting
+(
+id int primary key Auto_Increment,
+user varchar(50),
+password varchar(50),
+host varchar(50),
+dbname varchar(50)
+)

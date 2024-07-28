@@ -7,12 +7,16 @@ def connect():
         _password = os.getenv('DEFUALT_Password')
         _host = os.getenv('DEFUALT_Host')
         _dbname = os.getenv('DEFUALT_DBName') 
+        print("username: " + _username + ", password: " + _password + ", host: " + _host + ", dbname: " + _dbname)
         conn = mysql.connector.connect(host=_host, user=_username, password=_password, database=_dbname)
         if conn.is_connected():
+            print("Connected")
             return conn
         else:
+            print("Failed")
             return None
     except Exception as e:
+        print(str(e));
         return None
 
 def connectDynamicDB():

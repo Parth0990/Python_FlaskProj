@@ -9,6 +9,7 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
+print("Started")
 #CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 # Example route to demonstrate accessing environment variables
@@ -17,7 +18,7 @@ def index(): # Default value can be specified
     try:
         conn = connect()
         if conn is not None:
-            Qry = "select * from user;";
+            Qry = "select * from UserData;";
             cursor = conn.cursor(dictionary=True)
             cursor.execute(Qry)
             users = cursor.fetchall()
