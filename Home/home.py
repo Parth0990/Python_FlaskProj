@@ -1,8 +1,7 @@
-# admin.py
 from flask import Blueprint, jsonify
 from dbconfig import connect, connectDynamicDB
 
-home_blueprint = Blueprint('admin', __name__)
+home_blueprint = Blueprint('home', __name__)
 
 @home_blueprint.route('/dashboard', methods=['GET'])
 def admin_index():
