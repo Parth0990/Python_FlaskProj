@@ -8,6 +8,9 @@ pip install flask
 -- pandas
 pip install pandas
 
+-- pydantic
+pip install pydantic
+
 -- mysql
 pip install mysql-connector-python
 

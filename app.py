@@ -14,4 +14,4 @@ CORS(app)
 app.register_blueprint(home_blueprint, url_prefix='/home')
 
 if __name__ == '__main__':
-    app.run(debug= os.getenv("DEBUG"))
+    app.run(debug= os.getenv("DEBUG"), host='127.0.0.1', port=5545)
