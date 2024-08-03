@@ -25,7 +25,7 @@ def SignUpCompany():
         loginData = LoginModel(SignUpData['CompanyName'], SignUpData['OwnerName'], SignUpData['CompanyAddr'], SignUpData['CountryId'], SignUpData['StateId'], SignUpData['CityId'], SignUpData['ZipCode'], SignUpData['Email'], SignUpData['Mobile'], SignUpData['Password'])
         Qry = "Insert Into Company(CompanyName, OwnerName, CompanyAddr, CountryId, StateId, CityId, ZipCode) Values(%s, %s, %s, %s, %s, %s, %s)"
         parameter = (loginData.CompanyName, loginData.OwnerName, loginData.CompanyAddr, loginData.CountryId, loginData.StateId, loginData.CityId, loginData.ZipCode)
-        msg = SaveDataIntoTables(Qry=Qry, parameter=parameter, InsertIntoMainDb=False)
+        msg = SaveDataIntoTables(Qry=Qry, parameter=parameter, InsertIntoMainDb=True)
         return jsonify({"Error:" : {"Message": str(msg)}});
     except Exception as e:
         return jsonify({"Error:" : {"Message: " : str(e)}});

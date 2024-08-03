@@ -53,7 +53,7 @@ def SaveDataIntoTables(Qry: str, parameter: any, InsertIntoMainDb: bool):
         if InsertIntoMainDb:
             conn = connect()
             if conn is not None:
-                cursor = conn.cursor(dictionay=True)
+                cursor = conn.cursor(dictionary=True)
                 count = cursor.execute(Qry, parameter)
                 print(count)
                 return "Success"
@@ -62,7 +62,7 @@ def SaveDataIntoTables(Qry: str, parameter: any, InsertIntoMainDb: bool):
         else:
             conn = connectDynamicDB()
             if conn is not None:
-                cursor = conn.cursor(dictionay=True)
+                cursor = conn.cursor(dictionary=True)
                 count = cursor.execute(Qry, parameter)
                 print(count)
                 return "Success"
