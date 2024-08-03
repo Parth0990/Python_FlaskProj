@@ -1,5 +1,6 @@
 import os
 import mysql.connector
+from flask import jsonify 
 
 def connect():
     try:
@@ -54,19 +55,33 @@ def SaveDataIntoTables(Qry: str, parameter: any, InsertIntoMainDb: bool):
             conn = connect()
             if conn is not None:
                 cursor = conn.cursor(dictionary=True)
-                count = cursor.execute(Qry, parameter)
-                print(count)
-                return "Success"
+                cursor.execute(Qry, parameter)
+                print(cursor)
+                last_id = cursor.lastrowid
+                print(last_id)
+                if last_id > 0:
+                    print('hit')
+                    conn.commit()
+                    return jsonify({"Message:" : "Record Inserted Successfully."}, {"Last_InsertedId": last_id})
+                else:
+                    conn.rollback()
+                    return jsonify({"Message": "Record Failed to Insert"}, {"Last_InsertedId" : 0})
             else:
-                return "Please Verify DB Settings"
+                return jsonify({"Message": "Please Verify DB Settings"})
         else:
             conn = connectDynamicDB()
             if conn is not None:
                 cursor = conn.cursor(dictionary=True)
-                count = cursor.execute(Qry, parameter)
-                print(count)
-                return "Success"
+                cursor.execute(Qry, parameter)
+                print(cursor)
+                last_id = cursor.lastrowid
+                print(last_id)
+                if last_id > 0:
+                    conn.commit()
+                    return jsonify({"Message:" : "Record Inserted Successfully."}, {"Last_InsertedId": last_id})
+                else:
+                    return jsonify({"Message": "Record Failed to Insert"}, {"Last_InsertedId" : 0})
             else:
-                return "Please Verify DB Settings"
+                return jsonify({"Message": "Please Verify DB Settings"})
     except Exception as e:
-        return str(e)
+        return jsonify({"Message": str(e)})

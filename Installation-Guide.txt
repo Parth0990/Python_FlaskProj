@@ -95,7 +95,7 @@ CREATE Table CountryMas(
 	Latitude decimal(20, 20),
 	CreatedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	ModifiedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-)
+);
 
 -- Create StateMas
 CREATE Table StateMas(
@@ -126,7 +126,7 @@ CREATE Table CityMas(
 	ModifiedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	FOREIGN KEY (CountryId) REFERENCES CountryMas(CountryId)
 	FOREIGN KEY (StateId) REFERENCES StateMas(StateId)
-)
+);
 
 -- Add an index to the photographer_id in User for better performance
 CREATE INDEX idx_photographer_id ON User (photographer_id);
