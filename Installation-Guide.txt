@@ -114,7 +114,7 @@ CREATE Table StateMas(
 
 -- Create CityMas
 CREATE Table CityMas(
-	StateId int AUTO_INCREMENT PRIMARY KEY,
+	CityId int AUTO_INCREMENT PRIMARY KEY,
 	CountryId INT,
 	StateId INT,
 	Name VARCHAR(50),

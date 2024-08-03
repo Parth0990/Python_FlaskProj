@@ -54,13 +54,13 @@ def SaveDataIntoTables(Qry: str, parameter: any, InsertIntoMainDb: bool):
         if InsertIntoMainDb:
             conn = connect()
             if conn is not None:
+
                 cursor = conn.cursor(dictionary=True)
                 cursor.execute(Qry, parameter)
-                print(cursor)
+
                 last_id = cursor.lastrowid
-                print(last_id)
+                
                 if last_id > 0:
-                    print('hit')
                     conn.commit()
                     return jsonify({"Message:" : "Record Inserted Successfully."}, {"Last_InsertedId": last_id})
                 else:
@@ -71,11 +71,12 @@ def SaveDataIntoTables(Qry: str, parameter: any, InsertIntoMainDb: bool):
         else:
             conn = connectDynamicDB()
             if conn is not None:
+
                 cursor = conn.cursor(dictionary=True)
                 cursor.execute(Qry, parameter)
-                print(cursor)
+                
                 last_id = cursor.lastrowid
-                print(last_id)
+                
                 if last_id > 0:
                     conn.commit()
                     return jsonify({"Message:" : "Record Inserted Successfully."}, {"Last_InsertedId": last_id})

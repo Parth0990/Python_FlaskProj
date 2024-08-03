@@ -1,36 +1,49 @@
 from dbconfig import connect, SaveDataIntoTables
 from flask import Blueprint, jsonify, request,json
 from datetime import datetime
-
-
-class LoginModel:
-    def __init__(self, CompanyName: str, OwnerName: str, CompanyAddr: str, CountryId: int, StateId: int, CityId: int, ZipCode: str, Email: str, Mobile: str, Password: str):
-        self.CompanyName = CompanyName
-        self.OwnerName = OwnerName
-        self.CompanyAddr = CompanyAddr
-        self.CountryId = CountryId
-        self.StateId = StateId
-        self.CityId = CityId
-        self.ZipCode = ZipCode
-        self.Email = Email
-        self.Mobile = Mobile
-        self.Password = Password
+from Models.CommonModels import CompanyModel, LoginModel
+from Methods.CommonMethods import generate_alphanumeric_string
 
 login_blueprint = Blueprint('login', __name__)
 
 @login_blueprint.route('/signup', methods=["POST"])
 def SignUpCompany():
     try:
+
         Data = request.json;
         SignUpData = Data['SignUpData']
-        loginData = LoginModel(SignUpData['CompanyName'], SignUpData['OwnerName'], SignUpData['CompanyAddr'], SignUpData['CountryId'], SignUpData['StateId'], SignUpData['CityId'], SignUpData['ZipCode'], SignUpData['Email'], SignUpData['Mobile'], SignUpData['Password'])
+
+        CompanyData = CompanyModel(SignUpData['CompanyName'], SignUpData['OwnerName'], SignUpData['CompanyAddr'], SignUpData['CountryId'], SignUpData['StateId'], SignUpData['CityId'], SignUpData['ZipCode'], SignUpData['Email'], SignUpData['Mobile'], SignUpData['Password'])
+
         Qry = "Insert Into Company(name, OwnerName, Address, CountryId, StateId, CityId, ZipCode, CreatedDate) Values(%s, %s, %s, %s, %s, %s, %s, %s)"
+
         CreatedDate = datetime.now()
-        parameter = (loginData.CompanyName, loginData.OwnerName, loginData.CompanyAddr, loginData.CountryId, loginData.StateId, loginData.CityId, loginData.ZipCode, CreatedDate)
+        parameter = (CompanyData.CompanyName, CompanyData.OwnerName, CompanyData.CompanyAddr, CompanyData.CountryId, CompanyData.StateId, CompanyData.CityId, CompanyData.ZipCode, CreatedDate)
+
         response = SaveDataIntoTables(Qry=Qry, parameter=parameter, InsertIntoMainDb=True)
-        ResponseData = response.get_json()
-        companyId = ResponseData[1]["Last_InsertedId"]
-        print(companyId)
-        return jsonify({"Response:" : ResponseData[0]}, {"Success": True});
+
+        ResponseData = response.get_json() 
+
+        if int(ResponseData[1]["Last_InsertedId"]) > 0:
+            LoginData = LoginModel(SignUpData['Mobile'], SignUpData['Email'], SignUpData['Password'], 0, SignUpData['UserType'])
+            
+            Qry = "Insert Into LoginDetails(Mobile, Email, Password, IsActive, UserType, AccessToken, LastLoginDate, CreatedDate) Values(%s, %s, %s, %s, %s, %s, %s, %s)"
+
+            AccessToken = generate_alphanumeric_string()
+            parameter = (LoginData.Mobile, LoginData.Email, LoginData.Password, 0, LoginData.UserType, AccessToken, CreatedDate, CreatedDate)
+
+            response1 = SaveDataIntoTables(Qry=Qry, parameter=parameter, InsertIntoMainDb=True)
+
+            ResponseData1 = response1.get_json()
+            companyId = ResponseData[1]["Last_InsertedId"]
+            
+            if companyId > 0:
+                return jsonify({"Response:" : ResponseData1[0]}, {"Success": True});
+            else:
+                return jsonify({"Response:" : ResponseData1[0]}, {"Success": False});
+    
+        else:
+            return jsonify({"Response:" : ResponseData[0]}, {"Success": False});
+
     except Exception as e:
         return jsonify({"Error:" : {"Message: " : str(e)}});
