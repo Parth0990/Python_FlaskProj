@@ -47,3 +47,26 @@ def SetDynamicDBConfig():
         os.environ["Dynamic_DBName"]= dbconfig[0]["dbname"]
     except Exception as e:
         return None
+
+def SaveDataIntoTables(Qry: str, parameter: any, InsertIntoMainDb: bool):
+    try:
+        if InsertIntoMainDb:
+            conn = connect()
+            if conn is not None:
+                cursor = conn.cursor(dictionay=True)
+                count = cursor.execute(Qry, parameter)
+                print(count)
+                return "Success"
+            else:
+                return "Please Verify DB Settings"
+        else:
+            conn = connectDynamicDB()
+            if conn is not None:
+                cursor = conn.cursor(dictionay=True)
+                count = cursor.execute(Qry, parameter)
+                print(count)
+                return "Success"
+            else:
+                return "Please Verify DB Settings"
+    except Exception as e:
+        return str(e)
