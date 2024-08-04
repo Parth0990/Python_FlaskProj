@@ -1,5 +1,5 @@
 from dbconfig import connect, SaveDataIntoTables
-from flask import Blueprint, jsonify, request,json
+from flask import Blueprint, jsonify, request
 from datetime import datetime
 from Models.CommonModels import CompanyModel, LoginModel
 from Methods.CommonMethods import generate_alphanumeric_string
@@ -13,7 +13,7 @@ def SignUpCompany():
         Data = request.json;
         SignUpData = Data['SignUpData']
 
-        CompanyData = CompanyModel(SignUpData['CompanyName'], SignUpData['OwnerName'], SignUpData['CompanyAddr'], SignUpData['CountryId'], SignUpData['StateId'], SignUpData['CityId'], SignUpData['ZipCode'], SignUpData['Email'], SignUpData['Mobile'], SignUpData['Password'])
+        CompanyData = CompanyModel(SignUpData['CompanyName'], SignUpData['OwnerName'], SignUpData['CompanyAddr'], SignUpData['CountryId'], SignUpData['StateId'], SignUpData['CityId'], SignUpData['ZipCode'])
 
         Qry = "Insert Into Company(name, OwnerName, Address, CountryId, StateId, CityId, ZipCode, CreatedDate) Values(%s, %s, %s, %s, %s, %s, %s, %s)"
 
@@ -35,10 +35,10 @@ def SignUpCompany():
             response1 = SaveDataIntoTables(Qry=Qry, parameter=parameter, InsertIntoMainDb=True)
 
             ResponseData1 = response1.get_json()
-            companyId = ResponseData[1]["Last_InsertedId"]
+            LoginId = ResponseData[1]["Last_InsertedId"]
             
-            if companyId > 0:
-                return jsonify({"Response:" : ResponseData1[0]}, {"Success": True});
+            if LoginId > 0:
+                return jsonify({"Response:" : {"Message:": "Sign-Up Successfully."}}, {"Success": True});
             else:
                 return jsonify({"Response:" : ResponseData1[0]}, {"Success": False});
     
