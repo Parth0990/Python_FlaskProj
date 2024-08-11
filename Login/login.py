@@ -1,4 +1,4 @@
-from dbconfig import connect, SaveDataIntoTables
+from dbconfig import connect, SaveDataIntoTables, connectDynamicDB
 from flask import Blueprint, jsonify, request
 from datetime import datetime
 from Models.CommonModels import CompanyModel, LoginModel
@@ -53,6 +53,15 @@ def VerifyUser():
     try:
         Data = request.json
         UserData = Data['UserData']
-        print(UserData)
+        conn = connectDynamicDB()
+        if conn is not None:
+            Qry = "Select * FROM LoginDetails WHERE Email = %s AND Password = %s"
+            cusror = conn.cursor(dictionary=True)
+            parameter = (UserData['Email'], UserData['Password'])
+            cusror.execute(Qry, parameter)
+            users = cusror.fetchall()
+            return jsonify({"Response:" : {"Message:": users}}, {"Success": True});
+        else:
+            return jsonify({"Response:" : {"Message:": "Please Verify DB-Settings."}}, {"Success": False});
     except Exception as e:
         return jsonify({"Error:" : {"Message: " : str(e)}});
