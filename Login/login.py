@@ -47,3 +47,12 @@ def SignUpCompany():
 
     except Exception as e:
         return jsonify({"Error:" : {"Message: " : str(e)}});
+
+@login_blueprint.route('/verifyuser', methods=["GET"])
+def VerifyUser():
+    try:
+        Data = request.json
+        UserData = Data['UserData']
+        print(UserData)
+    except Exception as e:
+        return jsonify({"Error:" : {"Message: " : str(e)}});
